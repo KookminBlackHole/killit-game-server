@@ -9,6 +9,11 @@ var Game = function (uuid, p1, p2) {
   game.p2 = p2;
 
   /* Functions */
+  // Make game over by disconnect.
+  game.overCauseByDisconnect = function (player) {
+    
+  }
+
   // Send log to output channel.
   game.print = function () {
     console.log("[+] Game details");

@@ -32,7 +32,27 @@ io.sockets.on('connection', function (socket) {
 
     // When client disconnect
     socket.on('disconnect', function () {
-      // ...
+      var isInQueue = false;
+      matchmakingQueue.forEach(function (value, index, array) {
+        if (value.id == socket.id) {
+          delete matchmakingQueue[index];
+          isInQueue = true;
+        }
+      });
+
+      if (isInQueue) return;
+
+      Object.keys(games).forEach(function (value, index, array) {
+        if (games[value].p1.id == socket.id) {
+          games[value].overCauseByDisconnect(games[value].p1);
+          return;
+        }
+
+        if (games[value].p2.id == socket.id) {
+          games[value].overCauseByDisconnect(games[value].p2);
+          return;
+        }
+      });
     });
 
     // When client ready
