@@ -3,8 +3,8 @@ var http = require('http').Server(app);
 var socketIO = require('socket.io');
 var io = socketIO.listen(http);
 var uuidv4 = require('uuid/v4');
-var Player = require('./player');
-var Game = require('./game');
+var Player = require('./modules/player');
+var Game = require('./modules/game');
 
 var matchmakingQueue = [];
 var games = {};
@@ -28,7 +28,7 @@ app.get('/', function(req, res){
 // On connection
 io.sockets.on('connection', function (socket) {
     // Emit 'connected' to specific socket
-    socket.emit('connected', socket.id);
+    socket.emit('lobby:connected', socket.id);
 
     // When client disconnect
     socket.on('disconnect', function () {
@@ -36,7 +36,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     // When client ready
-    socket.on('player-ready', function (data) {
+    socket.on('lobby:player-ready', function (data) {
       var player = new Player(socket);
       player.setName(JSON.parse(data).name);
       player.print();

@@ -1,8 +1,16 @@
+var PlayerState = {
+  STATE_UNDEFINED: "Undefined State",
+  STATE_IDLE: "Idle",
+  STATE_PLAYER_READY: "Player Ready",
+  STATE_IN_GAME: "In Game"
+};
+
 var Player = function (socket) {
   var player = {};
   player.name = undefined;
   player.socket = socket;
   player.id = socket.id;
+  player.state = PlayerState.STATE_UNDEFINED;
   player.x = 0;
   player.y = 0;
   player.dirX = 0;
