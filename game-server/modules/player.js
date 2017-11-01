@@ -44,6 +44,7 @@ var Player = function (socket) {
   player.print = function () {
     console.log("[+] Player " + this.name + ":");
     console.log("\t- ID: " + this.id);
+    console.log("\t- State: " + this.state);
     console.log("\t- X: " + this.x);
     console.log("\t- Y: " + this.y);
     console.log("\t- Direction(X): " + this.dirX);
