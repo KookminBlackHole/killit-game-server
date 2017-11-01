@@ -7,14 +7,22 @@ var PlayerState = {
 
 var Player = function (socket) {
   var player = {};
+  
+  // Name for this player
   player.name = undefined;
+  // Socket instance
   player.socket = socket;
+  // Player id based on socket id
   player.id = socket.id;
+  // Current state for this player
   player.state = PlayerState.STATE_UNDEFINED;
+  // Player coordination on map
   player.x = 0;
   player.y = 0;
+  // Player direction on map
   player.dirX = 0;
   player.dirY = 0;
+  // Player view angle on map
   player.angle = 0;
 
   /* Functions */

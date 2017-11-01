@@ -3,22 +3,10 @@ var http = require('http').Server(app);
 var socketIO = require('socket.io');
 var io = socketIO.listen(http);
 var uuidv4 = require('uuid/v4');
-var Player = require('./modules/player');
-var Game = require('./modules/game');
+var Manager = require('./modules/manager');
 
-var matchmakingQueue = [];
-var games = {};
-
-// When Matchmaking succeed
-var makeMatch = function (p1, p2) {
-  var id = uuidv4();
-  var game = new Game(id, p1, p2);
-  games[id] = game;
-  game.print();
-  game.p1.socket.emit("game:start", game.uuid);
-  game.p2.socket.emit("game:start", game.uuid);
-  console.log(games);
-}
+// Instance of manager
+var manager = new Manager();
 
 // Route for root
 app.get('/', function(req, res){
@@ -32,43 +20,21 @@ io.sockets.on('connection', function (socket) {
 
     // When client disconnect
     socket.on('disconnect', function () {
-      var isInQueue = false;
-      matchmakingQueue.forEach(function (value, index, array) {
-        if (value.id == socket.id) {
-          delete matchmakingQueue[index];
-          isInQueue = true;
-        }
-      });
+      // Send dequeue signal to matchmaking manager
+      if (manager.matchmaking.dequeue(socket.id)) return;
 
-      if (isInQueue) return;
-
-      Object.keys(games).forEach(function (value, index, array) {
-        if (games[value].p1.id == socket.id) {
-          games[value].overCauseByDisconnect(games[value].p1);
-          return;
-        }
-
-        if (games[value].p2.id == socket.id) {
-          games[value].overCauseByDisconnect(games[value].p2);
-          return;
-        }
-      });
+      // If don't, in-game client may be disconnected
+      manager.game.playerDisconnect(socket.id);
     });
 
     // When client ready
     socket.on('lobby:player-ready', function (data) {
-      var player = new Player(socket);
-      player.setName(JSON.parse(data).name);
-      player.print();
-      matchmakingQueue.push(player);
-
-      if (matchmakingQueue.length == 2) {
-        makeMatch(matchmakingQueue[0], matchmakingQueue[1]);
-        matchmakingQueue = [];
-      }
+      // Push to the matchmaking queue
+      manager.matchmaking.enqueue(socket, data);
     });
 });
 
+// Turn on the server on port 8080
 http.listen(8080, function(){
   console.log("[+] Killit Game Server");
   console.log("[+] Now listening on 0.0.0.0:8080");
