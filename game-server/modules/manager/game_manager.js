@@ -27,12 +27,16 @@ var GameManager = function (uuid, p1, p2) {
       Object.keys(manager.games).forEach(function (value, index, array) {
         if (manager.games[value].p1.id == socket.id) {
           manager.games[value].overCauseByDisconnect(manager.games[value].p1);
+          console.log("[+] Game " + manager.games[value].id + " was over caused by disconnection :")
+          manager.games[value].p1.print();
           delete manager.games[index];
           return;
         }
   
         if (manager.games[value].p2.id == socket.id) {
           manager.games[value].overCauseByDisconnect(manager.games[value].p2);
+          console.log("[+] Game " + manager.games[value].id + " was over caused by disconnection :")
+          manager.games[value].p1.print();
           delete manager.games[index];
           return;
         }
