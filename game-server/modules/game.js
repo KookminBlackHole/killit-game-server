@@ -1,9 +1,4 @@
-var GameState = {
-  STATE_UNDEFINED: "Undefined",
-  STATE_GAME_ESTABLISHED: "Established",
-  STATE_IN_PROGRESS: "In Progress",
-  STATE_GAME_OVER: "Game Over"
-};
+var State = require("./state");
 
 var Game = function (uuid, p1, p2) {
   var game = {};
@@ -12,7 +7,7 @@ var Game = function (uuid, p1, p2) {
   game.uuid = uuid;
 
   // State for this game
-  game.state = GameState.STATE_UNDEFINED;
+  game.state = State.game.STATE_UNDEFINED;
 
   // Socket instances for players
   game.p1 = p1;

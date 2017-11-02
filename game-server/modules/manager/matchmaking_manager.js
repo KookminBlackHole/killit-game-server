@@ -13,6 +13,7 @@ var MatchmakingManager = function () {
       // Initialize player
       var player = new Player(socket);
       player.setName(JSON.parse(data).name);
+      // player.setState(PlayerState.IDLE);
       player.print();
       
       manager.queue.push(player);

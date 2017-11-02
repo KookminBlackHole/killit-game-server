@@ -1,9 +1,4 @@
-var PlayerState = {
-  STATE_UNDEFINED: "Undefined State",
-  STATE_IDLE: "Idle",
-  STATE_PLAYER_READY: "Player Ready",
-  STATE_IN_GAME: "In Game"
-};
+var State = require("./state");
 
 var Player = function (socket) {
   var player = {};
@@ -15,7 +10,7 @@ var Player = function (socket) {
   // Player id based on socket id
   player.id = socket.id;
   // Current state for this player
-  player.state = PlayerState.STATE_UNDEFINED;
+  player.state = State.player.STATE_UNDEFINED;
   // Player coordination on map
   player.x = 0;
   player.y = 0;
