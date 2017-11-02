@@ -1,9 +1,12 @@
 var GameManager = require("./manager/game_manager");
 var MatchmakingManager = require("./manager/matchmaking_manager");
 
-var Manager = {
-  game: new GameManager(),
-  matchmaking: new MatchmakingManager(game)
+var Manager = function () {
+  var manager = {};
+  manager.game = new GameManager();
+  manager.matchmaking = new MatchmakingManager(manager.game);
+
+  return manager
 }
 
 module.exports = Manager;

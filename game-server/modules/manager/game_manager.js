@@ -1,4 +1,4 @@
-var Game = require('./modules/game');
+var Game = require('../game');
 
 var GameManager = function (uuid, p1, p2) {
   var manager = {};

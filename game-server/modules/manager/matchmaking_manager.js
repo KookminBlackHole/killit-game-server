@@ -1,4 +1,4 @@
-var Player = require('./modules/player');
+var Player = require('../player');
 
 var MatchmakingManager = function (gameManager) {
   var manager = {};
