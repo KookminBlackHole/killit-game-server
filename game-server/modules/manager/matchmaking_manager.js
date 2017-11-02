@@ -51,4 +51,4 @@ var MatchmakingManager = function () {
   };
 }
 
-module.exports = MatchmakingManager;
+module.exports = MatchmakingManager();

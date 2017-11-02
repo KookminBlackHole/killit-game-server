@@ -52,4 +52,4 @@ var GameManager = function (uuid, p1, p2) {
   };
 }
 
-module.exports = GameManager;
+module.exports = GameManager();
