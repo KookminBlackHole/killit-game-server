@@ -15,15 +15,15 @@ var MatchmakingManager = function () {
       player.setName(JSON.parse(data).name);
       player.print();
       
-      this.queue.push(player);
-      this.checkMatch();
+      manager.queue.push(player);
+      manager.checkMatch();
     }
   
     manager.dequeue = function (id) {
       var isInQueue = false;
-      this.queue.forEach(function (value, index, array) {
+      manager.queue.forEach(function (value, index, array) {
         if (value.id == socket.id) {
-          delete this.queue[index];
+          delete manager.queue[index];
           isInQueue = true;
         }
       });
@@ -32,9 +32,9 @@ var MatchmakingManager = function () {
     }
   
     manager.checkMatch = function() {
-      if (this.queue.length >= 2) {
-        GameManager.makeGame(this.queue[0], this.queue[1]);
-        this.queue = [];
+      if (manager.queue.length >= 2) {
+        GameManager.makeGame(manager.queue[0], manager.queue[1]);
+        manager.queue = [];
       }
     }
 
