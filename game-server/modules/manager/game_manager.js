@@ -23,11 +23,13 @@ var GameManager = function (uuid, p1, p2) {
     Object.keys(this.games).forEach(function (value, index, array) {
       if (this.games[value].p1.id == socket.id) {
         this.games[value].overCauseByDisconnect(this.games[value].p1);
+        delete this.games[index];
         return;
       }
 
       if (this.games[value].p2.id == socket.id) {
         this.games[value].overCauseByDisconnect(this.games[value].p2);
+        delete this.games[index];
         return;
       }
     });

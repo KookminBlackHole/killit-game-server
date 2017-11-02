@@ -18,11 +18,20 @@ var Game = function (uuid, p1, p2) {
   game.p1 = p1;
   game.p2 = p2;
 
-
   /* Functions */
   // Make game over cause by player disconnection
   game.overCauseByDisconnect = function (player) {
-    // disconnection algorithm...
+    if (this.p1.id == player.id) {
+      this.p2.socket.emit("game:over", {
+        "code": 1, "cause": "Player disconnect"
+      });
+    } else {
+      this.p1.socket.emit("game:over", {
+        "code": 1, "cause": "Player disconnect"
+      });
+    }
+
+    this.state = GameState.STATE_GAME_OVER;
   }
 
   // Send log to output channel. 

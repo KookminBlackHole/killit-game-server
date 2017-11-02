@@ -8,30 +8,38 @@ var Manager = require('./modules/manager');
 // Instance of manager
 var manager = new Manager();
 
+// Real-time client count
+var client_count = 0;
+
 // Route for root
 app.get('/', function(req, res){
-  res.send('<h1>Killit Game Server</h1>');
+  res.send('<h1>Killit Game Server</h1><h2>Now ' + client_count + ' clients online</h2>');
 });
 
 // On connection
 io.sockets.on('connection', function (socket) {
-    // Emit 'connected' to specific socket
-    socket.emit('lobby:connected', socket.id);
+  // When client disconnect
+  socket.on('disconnect', function () {
+    client_count--;
 
-    // When client disconnect
-    socket.on('disconnect', function () {
-      // Send dequeue signal to matchmaking manager
-      if (manager.matchmaking.dequeue(socket.id)) return;
+    // Send dequeue signal to matchmaking manager
+    if (manager.matchmaking.dequeue(socket.id)) return;
 
-      // If don't, in-game client may be disconnected
-      manager.game.playerDisconnect(socket.id);
-    });
+    // If don't, in-game client may be disconnected
+    manager.game.playerDisconnect(socket.id);
+  });
 
-    // When client ready
-    socket.on('lobby:player-ready', function (data) {
-      // Push to the matchmaking queue
-      manager.matchmaking.enqueue(socket, data);
-    });
+  // Emit 'connected' to specific socket
+  socket.emit('lobby:connected', socket.id);
+
+  // Increase client count
+  client_count++;
+
+  // When client ready
+  socket.on('lobby:player-ready', function (data) {
+    // Push to the matchmaking queue
+    manager.matchmaking.enqueue(socket, data);
+  });
 });
 
 // Turn on the server on port 8080
