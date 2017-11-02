@@ -2,7 +2,6 @@ var app = require('express')();
 var http = require('http').Server(app);
 var socketIO = require('socket.io');
 var io = socketIO.listen(http);
-var uuidv4 = require('uuid/v4');
 var Manager = require('./modules/manager');
 
 // Instance of manager

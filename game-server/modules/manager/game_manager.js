@@ -1,4 +1,5 @@
 var Game = require('../game');
+var uuidv4 = require('uuid/v4');
 
 var GameManager = function (uuid, p1, p2) {
   var manager = {};
