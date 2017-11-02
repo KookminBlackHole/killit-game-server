@@ -3,9 +3,9 @@ var MatchmakingManager = require("./manager/matchmaking_manager");
 
 var Manager = function () {
   var manager = {};
-  manager.matchmaking = new MatchmakingManager(new GameManager());
-  manager.game = manager.matchmaking.gameManager;
-
+  manager.game = GameManager.getInstance();
+  manager.matchmaking = MatchmakingManager.getInstance();
+  
   return manager;
 }
 
