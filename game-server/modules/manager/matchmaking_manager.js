@@ -30,7 +30,7 @@ var MatchmakingManager = function (gameManager) {
 
   manager.checkMatch = function() {
     if (this.queue.length >= 2) {
-      this.gameManager.makeGame(queue[0], queue[1]);
+      this.gameManager.makeGame(this.queue[0], this.queue[1]);
       this.queue = [];
     }
   }
