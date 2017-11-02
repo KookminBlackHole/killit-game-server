@@ -25,7 +25,7 @@ io.sockets.on('connection', function (socket) {
     if (manager.matchmaking.dequeue(socket.id)) return;
 
     // If don't, in-game client may be disconnected
-    manager.game.playerDisconnect(socket.id);
+    manager.game.playerDisconnect(socket);
   });
 
   // Emit 'connected' to specific socket

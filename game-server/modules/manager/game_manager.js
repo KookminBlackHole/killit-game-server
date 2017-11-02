@@ -22,7 +22,7 @@ var GameManager = function (uuid, p1, p2) {
       console.log(manager.games);
     };
   
-    manager.playerDisconnect = function (p1, p2) {
+    manager.playerDisconnect = function (socket) {
       // Check game instances, if exist over that game for player disconnection
       Object.keys(manager.games).forEach(function (value, index, array) {
         if (manager.games[value].p1.id == socket.id) {
