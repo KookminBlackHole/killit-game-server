@@ -1,5 +1,6 @@
 var Game = require('../game');
 var uuidv4 = require('uuid/v4');
+var State = require("./state");
 
 var GameManager = function (uuid, p1, p2) {
   var instance;
@@ -13,12 +14,19 @@ var GameManager = function (uuid, p1, p2) {
       // Generate id by UUIDv4
       var id = uuidv4();
       var game = new Game(id, p1, p2);
-      manager.games[id] = game;
       game.print();
+
+      // State change for player and game
+      game.state = State.game.STATE_GAME_ESTABLISHED;
+      game.p1.state = State.player.STATE_IN_GAME;
+      game.p2.state = State.player.STATE_IN_GAME;
   
       // Tell client that game is starting
       game.p1.socket.emit("game:start", game.uuid);
       game.p2.socket.emit("game:start", game.uuid);
+
+      // Tell manager to add this game on array
+      manager.games[id] = game;
       console.log(manager.games);
     };
   

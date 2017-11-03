@@ -1,5 +1,6 @@
 var Player = require('../player');
 var GameManager = require('./game_manager').getInstance();
+var State = require("./state");
 
 var MatchmakingManager = function () {
   var instance;
@@ -13,7 +14,7 @@ var MatchmakingManager = function () {
       // Initialize player
       var player = new Player(socket);
       player.setName(JSON.parse(data).name);
-      // player.setState(PlayerState.IDLE);
+      player.state = State.player.STATE_PLAYER_READY;
       player.print();
       
       manager.queue.push(player);
@@ -24,6 +25,7 @@ var MatchmakingManager = function () {
       var isInQueue = false;
       manager.queue.forEach(function (value, index, array) {
         if (value.id == socket.id) {
+          value.state = STATE_IDLE;
           delete manager.queue[index];
           isInQueue = true;
         }
