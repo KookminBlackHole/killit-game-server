@@ -26,7 +26,7 @@ var Game = function (uuid, p1, p2) {
       });
     }
 
-    this.state = GameState.STATE_GAME_OVER;
+    this.state = State.game.STATE_GAME_OVER;
   }
 
   // Send log to output channel. 
