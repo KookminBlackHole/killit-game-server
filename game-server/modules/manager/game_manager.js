@@ -1,6 +1,6 @@
 var Game = require('../game');
 var uuidv4 = require('uuid/v4');
-var State = require("./state");
+var State = require("../state");
 
 var GameManager = function (uuid, p1, p2) {
   var instance;
@@ -29,6 +29,12 @@ var GameManager = function (uuid, p1, p2) {
       manager.games[id] = game;
       console.log(manager.games);
     };
+
+    manager.playerPositionUpdate = function (socket, data) {
+      var game = games[data.uuid];
+      var id = socket.id;
+      // ...
+    }
   
     manager.playerDisconnect = function (socket) {
       // Check game instances, if exist over that game for player disconnection

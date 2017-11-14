@@ -39,6 +39,11 @@ io.sockets.on('connection', function (socket) {
     // Push to the matchmaking queue
     manager.matchmaking.enqueue(socket, data);
   });
+
+  // When player position changed
+  socket.on('game:update-player-position', function (data) {
+    manager.game.playerPositionUpdate(socket, data);
+  });
 });
 
 // Turn on the server on port 8080

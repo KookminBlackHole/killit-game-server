@@ -1,6 +1,6 @@
 var Player = require('../player');
 var GameManager = require('./game_manager').getInstance();
-var State = require("./state");
+var State = require("../state");
 
 var MatchmakingManager = function () {
   var instance;
