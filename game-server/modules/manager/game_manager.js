@@ -20,20 +20,45 @@ var GameManager = function (uuid, p1, p2) {
       game.state = State.game.STATE_GAME_ESTABLISHED;
       game.p1.state = State.player.STATE_IN_GAME;
       game.p2.state = State.player.STATE_IN_GAME;
-  
-      // Tell client that game is starting
-      game.p1.socket.emit("game:start", game.uuid);
-      game.p2.socket.emit("game:start", game.uuid);
+
+      // Start the game
+      game.start();
 
       // Tell manager to add this game on array
       manager.games[id] = game;
-      console.log(manager.games);
+      console.log("[+] Now " + Object.keys(manager.games).length + " games are in progress");
     };
+    
+    manager.playerDirectionUpdate = function (socket, data) {
+      // data key: uuid, x, y, dirX, dirY, speed
+      data = JSON.parse(data);
+      var game = manager.games[data.uuid];
+      if (game != undefined) {
+        var player = game.findPlayerById(socket.id);
+        var opponent = game.findOpponentById(socket.id);
+        
+        player.setPosition(data.x, data.y);
+        player.setDirection(data.dirX, data.dirY);
+        player.setSpeed(data.speed);
+        opponent.socket.emit("game:feed-player-direction", data);
+      } else {
+        console.log("[+] Previous movement was canceled due to game over");
+      }
+    }
 
-    manager.playerPositionUpdate = function (socket, data) {
-      var game = games[data.uuid];
-      var id = socket.id;
-      // ...
+    manager.playerAngleUpdate = function (socket, data) {
+      // data key: uuid, angle
+      data = JSON.parse(data);
+      var game = manager.games[data.uuid];
+      if (game != undefined) {
+        var player = game.findPlayerById(socket.id);
+        var opponent = game.findOpponentById(socket.id);
+        
+        player.setAngle(data.angle);
+        opponent.socket.emit("game:feed-player-angle", data);
+      } else {
+        console.log("[+] Previous movement was canceled due to game over");
+      }
     }
   
     manager.playerDisconnect = function (socket) {
@@ -41,17 +66,13 @@ var GameManager = function (uuid, p1, p2) {
       Object.keys(manager.games).forEach(function (value, index, array) {
         if (manager.games[value].p1.id == socket.id) {
           manager.games[value].overCauseByDisconnect(manager.games[value].p1);
-          console.log("[+] Game " + manager.games[value].uuid + " was over caused by disconnection :")
-          manager.games[value].p1.print();
-          delete manager.games[index];
+          delete manager.games[value];
           return;
         }
   
         if (manager.games[value].p2.id == socket.id) {
           manager.games[value].overCauseByDisconnect(manager.games[value].p2);
-          console.log("[+] Game " + manager.games[value].uuid + " was over caused by disconnection :")
-          manager.games[value].p1.print();
-          delete manager.games[index];
+          delete manager.games[value];
           return;
         }
       });

@@ -16,6 +16,8 @@ var MatchmakingManager = function () {
       player.setName(JSON.parse(data).name);
       player.state = State.player.STATE_PLAYER_READY;
       player.print();
+
+      console.log("[+] " + socket.id + ": Player enqueued from matchmaking queue");      
       
       manager.queue.push(player);
       manager.checkMatch();
@@ -24,9 +26,9 @@ var MatchmakingManager = function () {
     manager.dequeue = function (id) {
       var isInQueue = false;
       manager.queue.forEach(function (value, index, array) {
-        if (value.id == socket.id) {
-          value.state = STATE_IDLE;
-          delete manager.queue[index];
+        if (value.id == id) {
+          console.log("[+] " + id + ": Player dequeued from matchmaking queue");
+          manager.queue.splice(index, 1);
           isInQueue = true;
         }
       });

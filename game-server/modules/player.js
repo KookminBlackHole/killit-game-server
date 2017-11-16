@@ -17,7 +17,9 @@ var Player = function (socket) {
   // Player direction on map
   player.dirX = 0;
   player.dirY = 0;
-  // Player view angle on map
+  // Player speed
+  player.speed = 0;
+  // Player angle
   player.angle = 0;
 
   /* Functions */
@@ -38,10 +40,15 @@ var Player = function (socket) {
     this.dirY = dirY;
   };
 
+  // Set player's view speed.
+  player.setSpeed = function (speed) {
+    this.speed = speed;
+  };
+
   // Set player's view angle.
   player.setAngle = function (angle) {
     this.angle = angle;
-  };
+  }
 
   // Send log to output channel.
   player.print = function () {
@@ -52,6 +59,7 @@ var Player = function (socket) {
     console.log("\t- Y: " + this.y);
     console.log("\t- Direction(X): " + this.dirX);
     console.log("\t- Direction(Y): " + this.dirY);
+    console.log("\t- Speed: " + this.speed);
     console.log("\t- Angle: " + this.angle);
   }
 

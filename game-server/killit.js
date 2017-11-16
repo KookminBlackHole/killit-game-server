@@ -17,6 +17,7 @@ app.get('/', function(req, res){
 
 // On connection
 io.sockets.on('connection', function (socket) {
+  console.log("[+] " + socket.id + ": Welcome to new player!");
   // When client disconnect
   socket.on('disconnect', function () {
     client_count--;
@@ -30,20 +31,27 @@ io.sockets.on('connection', function (socket) {
 
   // Emit 'connected' to specific socket
   socket.emit('lobby:connected', socket.id);
+  console.log("[+] " + socket.id + ": lobby-connected send");
 
   // Increase client count
   client_count++;
 
   // When client ready
   socket.on('lobby:player-ready', function (data) {
+    console.log("[+] " + socket.id + ": player-ready received");
     // Push to the matchmaking queue
     manager.matchmaking.enqueue(socket, data);
   });
 
   // When player position changed
-  socket.on('game:update-player-position', function (data) {
-    manager.game.playerPositionUpdate(socket, data);
+  socket.on('game:update-player-direction', function (data) {
+    manager.game.playerDirectionUpdate(socket, data);
   });
+
+  // When player angle changed
+  socket.on('game:update-player-angle', function (data) {
+    manager.game.playerAngleUpdate(socket, data);
+  })
 });
 
 // Turn on the server on port 8080
