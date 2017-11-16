@@ -13,7 +13,7 @@ cd backend
 rm -rf game-server
 unzip killit_server.zip
 cd game-server
-ps -aux | grep "node killit.js" | awk '{print $2}' | xargs kill -9
-nohup node killit.js &
+forever stop killit.js
+forever start killit.js
 exit
 DEPLOY
